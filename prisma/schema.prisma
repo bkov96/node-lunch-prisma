@@ -9,3 +9,43 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Category {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name  String @unique
+  books Book[]
+
+  @@index([name])
+  @@map("categories")
+}
+
+model Book {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title        String
+  author       String
+  isBestSeller Boolean @default(false)
+
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  categoryId String
+
+  borrowings Borrowing[] @relation("books_to_borrowings")
+
+  @@index([title, author])
+  @@map("books")
+}
+
+model Borrowing {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  books Book[] @relation("books_to_borrowings")
+
+  @@map("borrowings")
+}
