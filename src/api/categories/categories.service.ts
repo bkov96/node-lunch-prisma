@@ -9,4 +9,20 @@ export class CategoriesService {
   createNew(data: Prisma.CategoryCreateInput): Promise<PrismaCategory> {
     return this.prisma.category.create({ data });
   }
+
+  findMany(cfg?: {
+    where?: Prisma.CategoryWhereInput;
+    skip?: number;
+    take?: number;
+    orderBy?: Prisma.CategoryOrderByWithRelationInput;
+  }): Promise<PrismaCategory[]> {
+    const { where, skip, take, orderBy } = cfg || {};
+
+    return this.prisma.category.findMany({
+      where,
+      skip,
+      take,
+      orderBy,
+    });
+  }
 }
