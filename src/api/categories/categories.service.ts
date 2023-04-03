@@ -25,4 +25,8 @@ export class CategoriesService {
       orderBy,
     });
   }
+
+  findById(id: string): Promise<PrismaCategory> {
+    return this.prisma.category.findUnique({ where: { id } });
+  }
 }
