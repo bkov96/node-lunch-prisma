@@ -12,12 +12,14 @@ import { ExcludeResponseFields } from 'src/common/interceptors/exclude-fields.in
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { FindCategoriesByNameDto } from './dto/find-categories-by-name.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 /*
     Categories
     - Demonstrate simple Create and Read operations
 */
 
+@ApiTags('categories')
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
