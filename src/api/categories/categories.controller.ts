@@ -43,7 +43,7 @@ export class CategoriesController {
   // 3. Demonstrate use-case of excluding fields (createdAt, updatedAt)
   //    - using class-transformer
   //    - not really ideal, as generated types are not fully utilized
-  @Get(':name')
+  @Get('by-name/:name')
   @UseInterceptors(ClassSerializerInterceptor)
   async findCategoriesByName(
     @Param('name') name: string,
@@ -59,7 +59,7 @@ export class CategoriesController {
   //    - using custom interceptor
   //    - ideal when using document first approach => OpenAPI, class-transformer decorators are not needed
   //    - exclude will be supported by Prisma sooner or later, see https://github.com/prisma/prisma/issues/5042
-  @Get(':id')
+  @Get('by-id/:id')
   @UseInterceptors(
     ExcludeResponseFields<PrismaCategory>('createdAt', 'updatedAt'),
   )
