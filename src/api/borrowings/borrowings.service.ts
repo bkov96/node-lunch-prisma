@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Borrowing as PrismaBorrowing } from '@prisma/client';
+import { Prisma, Borrowing as PrismaBorrowing } from '@prisma/client';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+
+export type PrismaBorrowingWithBookTitles = Prisma.BorrowingGetPayload<{
+  include: { books: { select: { title: true } } };
+}>;
 
 @Injectable()
 export class BorrowingsService {
@@ -13,6 +17,12 @@ export class BorrowingsService {
 
     return this.prisma.borrowing.create({
       data: { books: { connect: bookIdConnectInputs } },
+    });
+  }
+
+  findAllBorrowingsWithBookTitles(): Promise<PrismaBorrowingWithBookTitles[]> {
+    return this.prisma.borrowing.findMany({
+      include: { books: { select: { title: true } } },
     });
   }
 }
