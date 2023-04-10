@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Category as PrismaCategory } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
-export class FindCategoriesByNameDto implements PrismaCategory {
-  constructor(partial: Partial<FindCategoriesByNameDto>) {
+export class FindCategoriesByNameResponseDto implements PrismaCategory {
+  constructor(partial: Partial<FindCategoriesByNameResponseDto>) {
     Object.assign(this, partial);
   }
 

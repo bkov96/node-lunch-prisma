@@ -11,7 +11,7 @@ import { Category as PrismaCategory } from '@prisma/client';
 import { ExcludeResponseFields } from 'src/common/interceptors/exclude-fields.interceptor';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { FindCategoriesByNameDto } from './dto/find-categories-by-name.dto';
+import { FindCategoriesByNameResponseDto } from './dto/find-categories-by-name.response.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 /*
@@ -47,12 +47,14 @@ export class CategoriesController {
   @UseInterceptors(ClassSerializerInterceptor)
   async findCategoriesByName(
     @Param('name') name: string,
-  ): Promise<FindCategoriesByNameDto[]> {
+  ): Promise<FindCategoriesByNameResponseDto[]> {
     const categories = await this.categoriesService.findMany({
       where: { name },
     });
 
-    return categories.map((category) => new FindCategoriesByNameDto(category));
+    return categories.map(
+      (category) => new FindCategoriesByNameResponseDto(category),
+    );
   }
 
   // 4. Demonstrate use-case of excluding fields
