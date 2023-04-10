@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
   BorrowingsService,
+  PrismaBorrowingWithBookCategories,
   PrismaBorrowingWithBookTitles,
 } from './borrowings.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -27,5 +28,13 @@ export class BorrowingsController {
     PrismaBorrowingWithBookTitles[]
   > {
     return this.borrowingsService.findAllBorrowingsWithBookTitles();
+  }
+
+  // 3. Demonstrate entity query using relation filter
+  @Get('includes-category/:categoryId')
+  async findAllBorrowingsIncludesCategory(
+    @Param('categoryId') categoryId: string,
+  ): Promise<PrismaBorrowingWithBookCategories[]> {
+    return this.borrowingsService.findAllBorrowingsIncludesCategory(categoryId);
   }
 }

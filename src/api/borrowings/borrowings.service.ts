@@ -6,6 +6,10 @@ export type PrismaBorrowingWithBookTitles = Prisma.BorrowingGetPayload<{
   include: { books: { select: { title: true } } };
 }>;
 
+export type PrismaBorrowingWithBookCategories = Prisma.BorrowingGetPayload<{
+  include: { books: { include: { category: true } } };
+}>;
+
 @Injectable()
 export class BorrowingsService {
   constructor(private readonly prisma: PrismaService) {}
@@ -23,6 +27,15 @@ export class BorrowingsService {
   findAllBorrowingsWithBookTitles(): Promise<PrismaBorrowingWithBookTitles[]> {
     return this.prisma.borrowing.findMany({
       include: { books: { select: { title: true } } },
+    });
+  }
+
+  findAllBorrowingsIncludesCategory(
+    categoryId: string,
+  ): Promise<PrismaBorrowingWithBookCategories[]> {
+    return this.prisma.borrowing.findMany({
+      where: { books: { some: { category: { id: categoryId } } } },
+      include: { books: { include: { category: true } } },
     });
   }
 }
