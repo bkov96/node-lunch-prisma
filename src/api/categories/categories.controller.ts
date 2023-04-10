@@ -14,11 +14,6 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { FindCategoriesByNameResponseDto } from './dto/find-categories-by-name.response.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-/*
-    Categories
-    - Demonstrate simple Create and Read operations
-*/
-
 @ApiTags('categories')
 @Controller('categories')
 export class CategoriesController {
