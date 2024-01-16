@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, Length } from 'class-validator';
 
-export class UpdateBookCategoryDto {
+export class UpdateBookCategoryRequestDto {
   @ApiProperty({ example: 'sci-fi' })
   @IsString()
   @Length(1, 30)

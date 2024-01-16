@@ -1,47 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { CreateBookWithCategoryDto } from './dto/create-book-with-category.dto';
-import { Prisma, Book as PrismaBook } from '@prisma/client';
-
-export type PrismaBookWithCategory = Prisma.BookGetPayload<{
-  include: { category: true };
-}>;
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BooksRepository, PrismaBook } from './books.repository';
+import { PrismaBookWithCategory } from './books.repository';
 
 @Injectable()
 export class BooksService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly booksRepository: BooksRepository) {}
 
-  createWithCategory(createBookWithCategoryDto: CreateBookWithCategoryDto): Promise<PrismaBook> {
-    const { categoryName, ...bookData } = createBookWithCategoryDto;
-
-    return this.prisma.book.create({
-      data: {
-        ...bookData,
-        category: {
-          connectOrCreate: {
-            where: { name: categoryName },
-            create: { name: categoryName },
-          },
-        },
-      },
-    });
+  async createWithCategory(categoryName: string, title: string, author: string, isBestSeller?: boolean): Promise<PrismaBookWithCategory> {
+    try {
+      return await this.booksRepository.createWithCategory(categoryName, { title, author, isBestSeller });
+    } catch (error) {
+      console.log(error);
+      throw InternalServerErrorException;
+    }
   }
 
-  updateBookCategory(id: string, categoryName: string): Promise<PrismaBook> {
-    return this.prisma.book.update({
-      where: { id },
-      data: {
-        category: {
-          connectOrCreate: {
-            where: { name: categoryName },
-            create: { name: categoryName },
-          },
-        },
-      },
-    });
+  async updateBookCategory(id: string, categoryName: string): Promise<PrismaBookWithCategory> {
+    try {
+      return await this.booksRepository.updateOrCreateBookCategory(id, categoryName);
+    } catch (error) {
+      console.log(error);
+      throw InternalServerErrorException;
+    }
   }
 
-  findAllBooksWithCategories(): Promise<PrismaBookWithCategory[]> {
-    return this.prisma.book.findMany({ include: { category: true } });
+  async findMany(): Promise<PrismaBook[]> {
+    try {
+      return await this.booksRepository.book.findMany();
+    } catch (error) {
+      console.log(error);
+      throw InternalServerErrorException;
+    }
   }
 }
