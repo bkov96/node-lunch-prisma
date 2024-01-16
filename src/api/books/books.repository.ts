@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Book, Prisma } from '@prisma/client';
-import { DefaultArgs } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 
-type BookDelegate = Prisma.BookDelegate<DefaultArgs>;
 type BookCreateInputWithoutCategory = Omit<Prisma.BookCreateInput, 'category'>;
 
 export type PrismaBook = Book;
@@ -15,7 +13,7 @@ export type PrismaBookWithCategory = Prisma.BookGetPayload<{
 export class BooksRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  get book(): BookDelegate {
+  get book(): PrismaService['book'] {
     return this.prisma.book;
   }
 

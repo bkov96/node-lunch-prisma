@@ -1,6 +1,5 @@
 import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { Category as PrismaCategory } from '@prisma/client';
-import { CategoriesRepository } from './categories.repository';
+import { CategoriesRepository, PrismaCategory } from './categories.repository';
 
 @Injectable()
 export class CategoriesService {
@@ -21,9 +20,9 @@ export class CategoriesService {
     }
   }
 
-  findMany(): Promise<PrismaCategory[]> {
+  async findMany(): Promise<PrismaCategory[]> {
     try {
-      return this.categoriesRepository.category.findMany();
+      return await this.categoriesRepository.category.findMany();
     } catch (error) {
       console.error(error);
       throw InternalServerErrorException;

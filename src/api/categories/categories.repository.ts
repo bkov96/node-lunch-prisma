@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Category } from '@prisma/client';
-import { DefaultArgs } from '@prisma/client/runtime/library';
+import { Category } from '@prisma/client';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-
-type CategoryDelegate = Prisma.CategoryDelegate<DefaultArgs>;
 
 export type PrismaCategory = Category;
 
@@ -11,7 +8,7 @@ export type PrismaCategory = Category;
 export class CategoriesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  get category(): CategoryDelegate {
+  get category(): PrismaService['category'] {
     return this.prisma.category;
   }
 
