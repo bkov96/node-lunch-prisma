@@ -1,32 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { Prisma, Category as PrismaCategory } from '@prisma/client';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { CategoriesRepository, PrismaCategory } from './categories.repository';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
-  createNew(data: Prisma.CategoryCreateInput): Promise<PrismaCategory> {
-    return this.prisma.category.create({ data });
+  async createByName(name: string): Promise<PrismaCategory> {
+    const existingCategory = await this.categoriesRepository.findByName(name);
+
+    if (existingCategory) {
+      throw new ConflictException('Category already exists');
+    }
+
+    try {
+      return this.categoriesRepository.category.create({ data: { name } });
+    } catch (error) {
+      console.error(error);
+      throw InternalServerErrorException;
+    }
   }
 
-  findMany(cfg?: {
-    where?: Prisma.CategoryWhereInput;
-    skip?: number;
-    take?: number;
-    orderBy?: Prisma.CategoryOrderByWithRelationInput;
-  }): Promise<PrismaCategory[]> {
-    const { where, skip, take, orderBy } = cfg || {};
-
-    return this.prisma.category.findMany({
-      where,
-      skip,
-      take,
-      orderBy,
-    });
+  findMany(): Promise<PrismaCategory[]> {
+    try {
+      return this.categoriesRepository.category.findMany();
+    } catch (error) {
+      console.error(error);
+      throw InternalServerErrorException;
+    }
   }
 
-  findById(id: string): Promise<PrismaCategory> {
-    return this.prisma.category.findUnique({ where: { id } });
+  async findById(id: string): Promise<PrismaCategory> {
+    const foundCategory = await this.categoriesRepository.findById(id);
+
+    if (!foundCategory) {
+      throw new NotFoundException('Category not found');
+    }
+
+    return foundCategory;
+  }
+
+  async findByName(name: string): Promise<PrismaCategory> {
+    const foundCategory = await this.categoriesRepository.findByName(name);
+
+    if (!foundCategory) {
+      throw new NotFoundException('Category not found');
+    }
+
+    return foundCategory;
   }
 }
