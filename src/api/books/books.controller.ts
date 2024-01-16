@@ -12,20 +12,13 @@ export class BooksController {
 
   // 1. Demonstrate entity creation with relation
   @Post()
-  async createNewWithCategory(
-    @Body() createBookWithCategoryDto: CreateBookWithCategoryDto,
-  ): Promise<PrismaBook> {
-    return await this.booksService.createWithCategory(
-      createBookWithCategoryDto,
-    );
+  async createNewWithCategory(@Body() createBookWithCategoryDto: CreateBookWithCategoryDto): Promise<PrismaBook> {
+    return await this.booksService.createWithCategory(createBookWithCategoryDto);
   }
 
   // 2. Demonstrate entity update with relation
   @Patch(':id')
-  async updateOrCreateBookCategory(
-    @Param('id') id: string,
-    @Body() { categoryName }: UpdateBookCategoryDto,
-  ): Promise<PrismaBook> {
+  async updateOrCreateBookCategory(@Param('id') id: string, @Body() { categoryName }: UpdateBookCategoryDto): Promise<PrismaBook> {
     return await this.booksService.updateBookCategory(id, categoryName);
   }
 

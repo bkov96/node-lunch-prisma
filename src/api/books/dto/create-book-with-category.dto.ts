@@ -2,9 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { IsBoolean, IsOptional, IsString, Length } from 'class-validator';
 
-export class CreateBookWithCategoryDto
-  implements Pick<Prisma.BookCreateInput, 'title' | 'author' | 'isBestSeller'>
-{
+export class CreateBookWithCategoryDto implements Pick<Prisma.BookCreateInput, 'title' | 'author' | 'isBestSeller'> {
   @ApiProperty({ example: 'Fire and Blood' })
   @IsString()
   @Length(1, 100)

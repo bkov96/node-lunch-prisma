@@ -1,13 +1,4 @@
-import {
-  Body,
-  ClassSerializerInterceptor,
-  Controller,
-  Get,
-  Param,
-  Post,
-  SerializeOptions,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, SerializeOptions, UseInterceptors } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryRequestDto } from './dto/create-category.request.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -22,9 +13,7 @@ export class CategoriesController {
   @ApiResponse({ type: CategoryResponseDto })
   @Post()
   @SerializeOptions({})
-  async createNew(
-    @Body() { name }: CreateCategoryRequestDto,
-  ): Promise<CategoryResponseDto> {
+  async createNew(@Body() { name }: CreateCategoryRequestDto): Promise<CategoryResponseDto> {
     const createdCategory = await this.categoriesService.createByName(name);
     return CategoryResponseDto.mapEntity(createdCategory);
   }
@@ -40,9 +29,7 @@ export class CategoriesController {
   @ApiResponse({ type: CategoryResponseDto })
   @Get('by-id/:id')
   @SerializeOptions({})
-  async findCategoryById(
-    @Param('id') id: string,
-  ): Promise<CategoryResponseDto> {
+  async findCategoryById(@Param('id') id: string): Promise<CategoryResponseDto> {
     const foundCategory = await this.categoriesService.findById(id);
     return CategoryResponseDto.mapEntity(foundCategory);
   }
@@ -50,9 +37,7 @@ export class CategoriesController {
   @ApiResponse({ type: CategoryResponseDto })
   @Get('by-name/:name')
   @SerializeOptions({ groups: ['lcmTimestamp'] })
-  async findCategoriesByName(
-    @Param('name') name: string,
-  ): Promise<CategoryResponseDto> {
+  async findCategoriesByName(@Param('name') name: string): Promise<CategoryResponseDto> {
     const foundCategory = await this.categoriesService.findByName(name);
     return CategoryResponseDto.mapEntity(foundCategory);
   }

@@ -30,9 +30,7 @@ export class BorrowingsService {
     });
   }
 
-  findAllBorrowingsIncludesCategory(
-    categoryId: string,
-  ): Promise<PrismaBorrowingWithBookCategories[]> {
+  findAllBorrowingsIncludesCategory(categoryId: string): Promise<PrismaBorrowingWithBookCategories[]> {
     return this.prisma.borrowing.findMany({
       where: { books: { some: { category: { id: categoryId } } } },
       include: { books: { include: { category: true } } },

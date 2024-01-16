@@ -11,9 +11,7 @@ export type PrismaBookWithCategory = Prisma.BookGetPayload<{
 export class BooksService {
   constructor(private readonly prisma: PrismaService) {}
 
-  createWithCategory(
-    createBookWithCategoryDto: CreateBookWithCategoryDto,
-  ): Promise<PrismaBook> {
+  createWithCategory(createBookWithCategoryDto: CreateBookWithCategoryDto): Promise<PrismaBook> {
     const { categoryName, ...bookData } = createBookWithCategoryDto;
 
     return this.prisma.book.create({

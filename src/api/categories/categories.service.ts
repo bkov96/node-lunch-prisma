@@ -1,10 +1,6 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
-import { CategoriesRepository, PrismaCategory } from './categories.repository';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Category as PrismaCategory } from '@prisma/client';
+import { CategoriesRepository } from './categories.repository';
 
 @Injectable()
 export class CategoriesService {
